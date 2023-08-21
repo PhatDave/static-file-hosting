@@ -6,10 +6,16 @@
 </script>
 
 <template>
-    {file.name}
-    {#if file.children}
-        {#each file.children as child}
-            <FileComp file={child} />
-        {/each}
-    {/if}
+    <li>
+        {#if file.children}
+            <details open>
+                <summary>{file.name}</summary>
+                {#each file.children as child}
+                    <svelte:self file={child} />
+                {/each}
+            </details>
+        {:else}
+            <span>{file.name}</span>
+        {/if}
+    </li>
 </template>

@@ -13,6 +13,8 @@
 
 <template>
     {#if root}
-        <FileComp file={root} />
+        <ul class="menu menu-xs bg-base-200 rounded-lg max-w-xs w-full">
+            <FileComp file={root} />
+        </ul>
     {/if}
 </template>
