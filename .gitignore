@@ -1,0 +1,4 @@
+﻿.vscode
+node_modules
+apps/api/upload
+dist
