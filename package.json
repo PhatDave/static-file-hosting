@@ -1,16 +1,20 @@
 {
-    "name": "cyka_file_hosting",
-    "scripts": {
-        "dev": "turbo run dev",
-        "build": "turbo run build"
-    },
-    "dependencies": {
-        "turbo": "^1.10.12"
-    },
-    "packageManager": "pnpm@8.5.0",
-    "engineStrict": true,
-    "engines": {
-        "pnpm": ">=8.5.0",
-        "node": ">18.0.0 <19.0.0"
-    }
+	"name": "cyka_file_hosting",
+	"scripts": {
+		"dev": "turbo run dev",
+		"build": "turbo run build"
+	},
+	"dependencies": {
+		"turbo": "^1.10.12"
+	},
+	"devDependencies": {
+		"prettier": "^3.0.2",
+		"prettier-plugin-svelte": "^3.0.3"
+	},
+	"packageManager": "pnpm@8.5.0",
+	"engineStrict": true,
+	"engines": {
+		"pnpm": ">=8.5.0",
+		"node": ">18.0.0 <19.0.0"
+	}
 }
