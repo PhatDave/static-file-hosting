@@ -52,9 +52,7 @@ const upload = multer({ storage: storage });
 
 app.get('/api', async (req, res) => {
     const tree = buildTree();
-    console.log(tree);
     cleanTree(tree)
-    console.log(tree);
     res.json({ root: tree });
 });
 
