@@ -34,7 +34,7 @@
 	{#if file.children}
 		<details>
 			<!-- svelte-ignore a11y-no-static-element-interactions -->
-			<summary>
+			<summary class="opacity-60">
 				<img class="aspect-square w-8" src="/icons/{getIcon(file)}" alt="Bronk" />
 				{file.name}
 			</summary>
