@@ -5,7 +5,7 @@
 	"main": "main.ts",
 	"private": true,
 	"scripts": {
-		"dev": "tsx main.ts",
+		"dev": "tsx watch main.ts",
 		"build": "tsup ."
 	},
 	"keywords": [],

@@ -37,10 +37,30 @@ function buildTree() {
     return dirTree(DESTINATION_FOLDER, { attributes: ['size', 'type', 'extension', 'mtime', 'extension'] });
 }
 
+const savedRegex = new RegExp(`^${DESTINATION_FOLDER}\\\\`);
+function cleanTree(tree) {
+    if (tree.path) {
+        tree.path = tree.path.replace(savedRegex, '');
+    }
+    if (tree.children) {
+        tree.children.forEach(child => cleanTree(child));
+    }
+    return tree;
+}
+
 const upload = multer({ storage: storage });
 
 app.get('/api', async (req, res) => {
-    res.json({ root: buildTree() });
+    const tree = buildTree();
+    console.log(tree);
+    cleanTree(tree)
+    console.log(tree);
+    res.json({ root: tree });
+});
+
+app.post('/api/**', upload.single('file'), (req, res) => {
+    console.log(`Uploading file ${req.file?.originalname} with size ${req.file?.size}B`);
+    res.status(200).json({ message: 'File uploaded successfully!' });
 });
 
 app.delete('/api/**', (req, res) => {
@@ -103,11 +123,6 @@ app.patch('/api/**', (req, res) => {
 
     fs.renameSync(fullPath, destinationFullPath);
     res.status(200).send();
-});
-
-app.post('/api/**', upload.single('file'), (req, res) => {
-    console.log(`Uploading file ${req.file?.originalname} with size ${req.file?.size}B`);
-    res.status(200).json({ message: 'File uploaded successfully!' });
 });
 
 app.listen(PORT, () => {
