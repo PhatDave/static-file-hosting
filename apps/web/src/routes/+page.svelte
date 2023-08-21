@@ -11,10 +11,8 @@
     });
 </script>
 
-<template>
-    {#if root}
-        <ul class="menu menu-xs bg-base-200 rounded-lg max-w-xs w-full">
-            <FileComp file={root} />
-        </ul>
-    {/if}
-</template>
+{#if root}
+    <ul class="menu menu-lg bg-base-200 rounded-lg max-w-4xl w-full">
+        <FileComp file={root} />
+    </ul>
+{/if}
