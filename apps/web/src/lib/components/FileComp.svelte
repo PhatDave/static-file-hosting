@@ -20,7 +20,7 @@
 
 <li>
 	{#if file.children}
-		<details open>  
+		<details>
 			<summary>
                 <img class="aspect-square w-8" src=/icons/{getIcon(file)} alt="Bronk"/>
                 {file.name}
