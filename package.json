@@ -5,7 +5,7 @@
         "build": "turbo run build"
     },
     "dependencies": {
-        "turbo": "^1.10.9"
+        "turbo": "^1.10.12"
     },
     "packageManager": "pnpm@8.5.0",
     "engineStrict": true,
