@@ -5,7 +5,7 @@
 	"main": "main.ts",
 	"private": true,
 	"scripts": {
-		"dev": "tsx watch main.ts",
+		"dev": "nodemon main.ts",
 		"build": "tsup ."
 	},
 	"keywords": [],
@@ -23,7 +23,6 @@
 		"@types/serve-static": "^1.15.2",
 		"ts-node": "^10.9.1",
 		"tsup": "^7.2.0",
-		"tsx": "^3.12.7",
 		"typescript": "^5.1.6"
 	},
 	"author": "Cyka",

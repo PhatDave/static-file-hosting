@@ -38,7 +38,7 @@ function buildTree() {
 }
 
 const savedRegex = new RegExp(`^${DESTINATION_FOLDER}\\\\`);
-function cleanTree(tree) {
+function cleanTree(tree: dirTree.DirectoryTree<Record<string, any>>) {
     if (tree.path) {
         tree.path = tree.path.replace(savedRegex, '');
     }

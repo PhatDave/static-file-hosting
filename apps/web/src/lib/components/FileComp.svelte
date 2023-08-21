@@ -2,8 +2,11 @@
 	import type { File } from '$types';
 	import iconTable from '$lib/IconTable.json';
 	import { ORIGIN } from '../../env';
+	import { dropdownStore } from '$lib/stores/dropdownStore';
 
 	export let file: File;
+
+	let dropdownOpen = false;
 
 	function getIcon(file: File) {
 		if (file.extension) {
@@ -18,15 +21,22 @@
 		return file.type + '.svg';
 	}
 
+	function getDownloadLink(file: File): string {
+		return `${ORIGIN}/${file.path}`;
+	}
+
+	function openDropdown(event: Event) {
+		event.preventDefault();
+		// @ts-ignore
+		dropdownStore.setClickXY(event.clientX, event.clientY);
+		dropdownStore.setTarget(file);
+		dropdownStore.toggleOpen();
+	}
 	// TODO: Make directory makeable
 	// TODO: Make item deleteable
 	// TODO: Make item renameable
 	// TODO: Make folders uploadable
 	// Maybe tarball them on web and send them to the server to be extracted?
-
-	function getDownloadLink(file: File): string {
-		return `${ORIGIN}/${file.path}`;
-	}
 </script>
 
 <li>
@@ -34,7 +44,8 @@
 	{#if file.children}
 		<details>
 			<!-- svelte-ignore a11y-no-static-element-interactions -->
-			<summary class="opacity-60">
+			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<summary class="opacity-60" on:contextmenu={openDropdown}>
 				<img class="aspect-square w-8" src="/icons/{getIcon(file)}" alt="Bronk" />
 				{file.name}
 			</summary>
@@ -46,7 +57,7 @@
 		</details>
 	{:else}
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<a href={getDownloadLink(file)} class="flex items-center">
+		<a href={getDownloadLink(file)} on:contextmenu={openDropdown} class="flex items-center">
 			<img class="aspect-square w-8" src="/icons/{getIcon(file)}" alt="Bronk" />
 			{file.name}
 		</a>
