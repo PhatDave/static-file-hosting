@@ -34,7 +34,7 @@ const storage = multer.diskStorage({
 });
 
 function buildTree() {
-    return dirTree(DESTINATION_FOLDER, { attributes: ['size', 'type', 'extension', 'mtime'] });
+    return dirTree(DESTINATION_FOLDER, { attributes: ['size', 'type', 'extension', 'mtime', 'extension'] });
 }
 
 const upload = multer({ storage: storage });

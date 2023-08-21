@@ -21,10 +21,11 @@ export interface APIResponse {
 }
 
 export interface File {
-	path:     string;
-	name:     string;
+	path: string;
+	name: string;
 	children: File[] | undefined;
-	size:     number;
-	type:     string;
-	mtime:    string;
+	size: number;
+	type: string;
+	mtime: string;
+	extension: string;
 }
