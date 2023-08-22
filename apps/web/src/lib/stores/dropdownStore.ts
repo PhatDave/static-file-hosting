@@ -1,9 +1,10 @@
 import { writable } from "svelte/store";
 import type { File } from "$types";
+import type {Writable} from 'svelte/store'
 
 function createStore() {
     type StoreType = {
-        target: File | undefined;
+        target: Writable<File> | undefined;
         clickXY: { x: number; y: number };
         open: boolean;
     }
@@ -23,7 +24,7 @@ function createStore() {
         close: () => update(state => {
             return { ...state, open: false };
         }),
-        setTarget: (file: File) => update(state =>  {
+        setTarget: (file: Writable<File>) => update(state =>  {
             return { ...state, target: file };
         }),
     };

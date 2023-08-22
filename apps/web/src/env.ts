@@ -1,5 +1,5 @@
-export const ORIGIN = 'https://file-hosting.site.quack-lab.dev/';
-// export const ORIGIN = 'http://localhost:3000/'
+// export const ORIGIN = 'https://file-hosting.site.quack-lab.dev';
+export const ORIGIN = 'http://localhost:3000'
 export const API_URL = `${ORIGIN}/api`;
 export const FILE_URL = `${ORIGIN}/file`;
 

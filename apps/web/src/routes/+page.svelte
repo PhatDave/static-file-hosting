@@ -3,6 +3,7 @@
 	import FileComp from '$lib/components/FileComp.svelte';
 	import { onMount } from 'svelte';
 	import type { File } from '$types';
+	import DropdownComp, { type DropdownButton } from '$lib/components/DropdownComp.svelte';
 	import { dropdownStore } from '$lib/stores/dropdownStore';
 
 	let root: File | undefined = undefined;
@@ -11,40 +12,35 @@
 		console.log(root);
 	});
 
-	let dropdownElement: HTMLElement;
-	$: {
-		if (dropdownElement) {
-			dropdownElement.style.left = `${$dropdownStore.clickXY.x}px`;
-			dropdownElement.style.top = `${$dropdownStore.clickXY.y}px`;
+	const dropdownButtons: DropdownButton[] = [];
+	dropdownButtons.push({
+		text: 'Rename',
+		action: () => {
+			$dropdownStore.target?.update(state => {
+				return { ...state, isEditable: true };
+			});
 		}
-	}
-
-	function closeDropdown(event: Event) {
-		if ($dropdownStore.open) {
-			dropdownStore.close();
-			event.stopPropagation();
-			event.preventDefault();
+	});
+	dropdownButtons.push({
+		text: 'Delete',
+		action: () => {
+			console.log('delete');
 		}
-	}
-
-	function blockCtxMenu(event: Event) {
-		event.stopPropagation();
-		event.preventDefault();
-	}
+	});
+	dropdownButtons.push({
+		text: 'New Folder',
+		action: () => {
+			console.log('new folder');
+		}
+	});
 </script>
 
-<svelte:window on:click={closeDropdown} on:contextmenu={blockCtxMenu} />
+<DropdownComp buttons={dropdownButtons} />
+
 {#if root}
 	<div class="flex justify-center">
 		<ul class="menu menu-lg bg-base-200 rounded-lg w-10/12 overflow-clip text-ellipsis">
-			<FileComp file={root} />
+			<FileComp f={root} />
 		</ul>
-	</div>
-{/if}
-{#if $dropdownStore.open}
-	<div bind:this={dropdownElement} class="z-50 absolute flex flex-col">
-		<div class="btn capitalize">Rename</div>
-		<div class="btn capitalize">Delete</div>
-		<div class="btn capitalize">New Folder</div>
 	</div>
 {/if}

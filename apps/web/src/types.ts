@@ -28,4 +28,5 @@ export interface File {
 	type: string;
 	mtime: string;
 	extension: string;
+	isEditable: boolean | undefined;
 }

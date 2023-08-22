@@ -3,10 +3,13 @@
 	import iconTable from '$lib/IconTable.json';
 	import { FILE_URL } from '../../env';
 	import { dropdownStore } from '$lib/stores/dropdownStore';
+	import { fileStore } from '$lib/stores/file';
+	import type { Writable } from 'svelte/store';
 
-	export let file: File;
+	export let f: File;
+	let nameInput: HTMLSpanElement;
 
-	let dropdownOpen = false;
+	const file: Writable<File> = fileStore(f);
 
 	function getIcon(file: File) {
 		if (file.extension) {
@@ -28,10 +31,44 @@
 	function openDropdown(event: Event) {
 		event.preventDefault();
 		// @ts-ignore
-		dropdownStore.setClickXY(event.clientX, event.clientY);
+		dropdownStore.setClickXY(event.pageX, event.pageY);
 		dropdownStore.setTarget(file);
 		dropdownStore.toggleOpen();
 	}
+
+	$: {
+		if ($file.isEditable) {
+			console.log(`FOCUS PLEASE`);
+			console.log(nameInput);
+			requestAnimationFrame(() => {
+				nameInput.focus();
+				const textRange = document.createRange();
+				textRange.selectNodeContents(nameInput);
+				textRange.collapse(false);
+				const sel = window.getSelection();
+				sel?.removeAllRanges();
+				sel?.addRange(textRange);
+			});
+			setTimeout(() => nameInput.focus(), 50);
+		}
+	}
+
+	function doUnfocus(event: Event) {
+		if ($file.isEditable) {
+			$file.isEditable = false;
+		}
+	}
+
+	function nameInputTrigger(event: KeyboardEvent) {
+		if (event.key === 'Enter') {
+			$file.isEditable = false;
+			$file.name = nameInput.innerText.trim();
+			console.log($file);
+			console.log('Do rename!');
+			return false;
+		}
+	}
+
 	// TODO: Make directory makeable
 	// TODO: Make item deleteable
 	// TODO: Make item renameable
@@ -41,25 +78,25 @@
 
 <li>
 	<!-- TODO: Make these drag and droppable https://svelte.dev/repl/b225504c9fea44b189ed5bfb566df6e6?version=4.2.0 -->
-	{#if file.children}
+	{#if $file.children}
 		<details open>
 			<!-- svelte-ignore a11y-no-static-element-interactions -->
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<summary class="opacity-60" on:contextmenu={openDropdown}>
-				<img class="aspect-square w-8" src="/icons/{getIcon(file)}" alt="Bronk" />
-				{file.name}
+			<summary class="opacity-60" on:contextmenu={openDropdown} on:focusout={doUnfocus}>
+				<img class="aspect-square w-8" src="/icons/{getIcon($file)}" alt="Bronk" />
+				<span class="dev overflow-hidden" bind:this={nameInput} on:keydown={nameInputTrigger} contenteditable={$file.isEditable}>{$file.name}</span>
 			</summary>
 			<ul>
-				{#each file.children as child}
+				{#each $file.children as child}
 					<svelte:self file={child} />
 				{/each}
 			</ul>
 		</details>
 	{:else}
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
-		<a href={getDownloadLink(file)} on:contextmenu={openDropdown} class="flex items-center">
-			<img class="aspect-square w-8" src="/icons/{getIcon(file)}" alt="Bronk" />
-			{file.name}
+		<a href={getDownloadLink($file)} on:contextmenu={openDropdown} class="flex items-center">
+			<img class="aspect-square w-8" src="/icons/{getIcon($file)}" alt="Bronk" />
+			<span bind:this={nameInput} on:keydown={nameInputTrigger} contenteditable={$file.isEditable}>{$file.name}</span>
 		</a>
 	{/if}
 </li>
