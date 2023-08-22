@@ -15,6 +15,10 @@ if (!fs.existsSync(DESTINATION_FOLDER)) {
     fs.mkdirSync(DESTINATION_FOLDER);
 }
 
+// Usage:
+// curl -H "Accept: multipart/form-data" -X GET "http://localhost:3000/file/"
+// curl -H "Content-Type: multipart/form-data" -X POST "http://localhost:3000/file/" -F file=@Enca.ahk
+
 app.use(serveStatic(WEB_FOLDER));
 app.use(cors());
 
