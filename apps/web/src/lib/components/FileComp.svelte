@@ -55,29 +55,27 @@
 
 	function doUnfocus(event: Event) {
 		if ($file.isEditable) {
-			$file.isEditable = false;
-			$file.name = nameInput.innerText.trim();
-			doRename();
+			doRename(nameInput.innerText.trim());
 		}
 	}
 
 	function nameInputTrigger(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
-			$file.isEditable = false;
-			$file.name = nameInput.innerText.trim();
-			doRename();
+			doRename(nameInput.innerText.trim());
 			return false;
 		}
 	}
 
-	function doRename() {
-		console.log('Do rename!');
+	function doRename(newName: string) {
+		$file.isEditable = false;
+		renameFile($file, $file.path.replace(new RegExp(`${$file.name}$`), newName));
 	}
 
 	// TODO: Make directory makeable
 	// TODO: Make item deleteable
 	// TODO: Make item renameable
 	// TODO: Make folders uploadable
+	// TODO: Add size display
 	// Maybe tarball them on web and send them to the server to be extracted?
 </script>
 

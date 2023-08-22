@@ -48,7 +48,11 @@ function cleanTree(tree: dirTree.DirectoryTree<Record<string, any>>) {
         tree.path = tree.path.replace(savedRegex, '');
     }
     if (tree.children) {
-        tree.children.forEach(child => cleanTree(child));
+        tree.children.forEach(child => { 
+            // This does not work, maybe figure out why
+            child.custom.parent = tree;
+            cleanTree(child); 
+        });
     }
     return tree;
 }
@@ -75,7 +79,7 @@ app.get('/file/**', (req, res) => {
         return;
     }
     console.log(`Serving ${fullPath}`);
-    res.status(200).sendFile(fullPath, {root: '.'});
+    res.status(200).sendFile(fullPath, { root: '.' });
 });
 
 app.post('/file/**', upload.single('file'), (req, res) => {
@@ -85,7 +89,7 @@ app.post('/file/**', upload.single('file'), (req, res) => {
 
 app.get('/api', (req, res) => {
     const tree = buildTree();
-    cleanTree(tree)
+    cleanTree(tree);
     res.json({ root: tree });
 });
 
@@ -127,6 +131,7 @@ app.patch('/api/**', (req, res) => {
         return;
     }
     const fullPath = path.join(DESTINATION_FOLDER, _path);
+    console.log(fullPath);
     if (!fs.existsSync(fullPath)) {
         res.status(404).json({ message: 'File not found!' });
         return;
@@ -142,7 +147,7 @@ app.patch('/api/**', (req, res) => {
         return;
     }
     const destinationFullPath = path.join(DESTINATION_FOLDER, destinationPath);
-    if (fs.existsSync(destinationFullPath))  {
+    if (fs.existsSync(destinationFullPath)) {
         res.status(400).json({ message: 'Destination path already exists!' });
         return;
     }
