@@ -37,7 +37,7 @@
 	}
 
 	$: {
-		if ($file.isEditable) {
+		if ($file?.isEditable) {
 			console.log(`FOCUS PLEASE`);
 			console.log(nameInput);
 			requestAnimationFrame(() => {
@@ -56,6 +56,8 @@
 	function doUnfocus(event: Event) {
 		if ($file.isEditable) {
 			$file.isEditable = false;
+			$file.name = nameInput.innerText.trim();
+			doRename();
 		}
 	}
 
@@ -63,10 +65,13 @@
 		if (event.key === 'Enter') {
 			$file.isEditable = false;
 			$file.name = nameInput.innerText.trim();
-			console.log($file);
-			console.log('Do rename!');
+			doRename();
 			return false;
 		}
+	}
+
+	function doRename() {
+		console.log('Do rename!');
 	}
 
 	// TODO: Make directory makeable
@@ -82,13 +87,16 @@
 		<details open>
 			<!-- svelte-ignore a11y-no-static-element-interactions -->
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
-			<summary class="opacity-60" on:contextmenu={openDropdown} on:focusout={doUnfocus}>
+			<summary class="opacity-60" on:contextmenu={openDropdown}>
 				<img class="aspect-square w-8" src="/icons/{getIcon($file)}" alt="Bronk" />
-				<span class="dev overflow-hidden" bind:this={nameInput} on:keydown={nameInputTrigger} contenteditable={$file.isEditable}>{$file.name}</span>
+				<span bind:this={nameInput} 
+				on:keydown={nameInputTrigger} 
+				on:focusout={doUnfocus} 
+				contenteditable={$file.isEditable}>{$file.name}</span>
 			</summary>
 			<ul>
 				{#each $file.children as child}
-					<svelte:self file={child} />
+					<svelte:self f={child} />
 				{/each}
 			</ul>
 		</details>
@@ -96,7 +104,10 @@
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<a href={getDownloadLink($file)} on:contextmenu={openDropdown} class="flex items-center">
 			<img class="aspect-square w-8" src="/icons/{getIcon($file)}" alt="Bronk" />
-			<span bind:this={nameInput} on:keydown={nameInputTrigger} contenteditable={$file.isEditable}>{$file.name}</span>
+			<span bind:this={nameInput} 
+			on:keydown={nameInputTrigger} 
+			on:focusout={doUnfocus} 
+			contenteditable={$file.isEditable}>{$file.name}</span>
 		</a>
 	{/if}
 </li>

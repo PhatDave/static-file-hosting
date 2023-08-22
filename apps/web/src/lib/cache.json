@@ -1,7 +1,117 @@
 {
     "path": "upload",
     "name": "upload",
-    "children": [],
+    "children": [
+      {
+        "path": "AAAAAAAAAA.ahk",
+        "name": "AAAAAAAAAA.ahk",
+        "size": 990,
+        "type": "file",
+        "extension": ".ahk",
+        "mtime": "2023-08-21T15:59:46.546Z"
+      },
+      {
+        "path": "src",
+        "name": "src",
+        "children": [
+          {
+            "path": "src\\Database",
+            "name": "Database",
+            "children": [
+              {
+                "path": "src\\Database\\Database.ts",
+                "name": "Database.ts",
+                "size": 235,
+                "type": "file",
+                "extension": ".ts",
+                "mtime": "2023-07-25T16:16:34.614Z"
+              },
+              {
+                "path": "src\\Database\\OracleDatabase.ts",
+                "name": "OracleDatabase.ts",
+                "size": 523,
+                "type": "file",
+                "extension": ".ts",
+                "mtime": "2023-07-25T16:16:34.615Z"
+              },
+              {
+                "path": "src\\Database\\PostgresDatabase.ts",
+                "name": "PostgresDatabase.ts",
+                "size": 292,
+                "type": "file",
+                "extension": ".ts",
+                "mtime": "2023-07-25T16:16:34.615Z"
+              }
+            ],
+            "size": 1050,
+            "type": "directory",
+            "mtime": "2023-08-21T17:42:35.164Z"
+          },
+          {
+            "path": "src\\main.ts",
+            "name": "main.ts",
+            "size": 106,
+            "type": "file",
+            "extension": ".ts",
+            "mtime": "2023-07-25T16:16:34.614Z"
+          }
+        ],
+        "size": 1156,
+        "type": "directory",
+        "mtime": "2023-08-21T17:42:35.152Z"
+      },
+      {
+        "path": "test",
+        "name": "test",
+        "children": [
+          {
+            "path": "test\\AAAAAAAAAA.ahk",
+            "name": "AAAAAAAAAA.ahk",
+            "size": 990,
+            "type": "file",
+            "extension": ".ahk",
+            "mtime": "2023-08-21T16:02:41.452Z"
+          },
+          {
+            "path": "test\\test2",
+            "name": "test2",
+            "children": [
+              {
+                "path": "test\\test2\\Enca.ahk",
+                "name": "Enca.ahk",
+                "size": 990,
+                "type": "file",
+                "extension": ".ahk",
+                "mtime": "2023-08-21T16:02:43.717Z"
+              }
+            ],
+            "size": 990,
+            "type": "directory",
+            "mtime": "2023-08-21T16:02:43.717Z"
+          },
+          {
+            "path": "test\\test3",
+            "name": "test3",
+            "children": [
+              {
+                "path": "test\\test3\\Enca.ahk",
+                "name": "Enca.ahk",
+                "size": 990,
+                "type": "file",
+                "extension": ".ahk",
+                "mtime": "2023-08-22T06:43:37.580Z"
+              }
+            ],
+            "size": 990,
+            "type": "directory",
+            "mtime": "2023-08-21T16:02:47.438Z"
+          }
+        ],
+        "size": 2970,
+        "type": "directory",
+        "mtime": "2023-08-21T18:22:27.162Z"
+      }
+    ],
     "size": 5116,
     "type": "directory",
     "mtime": "2023-08-21T19:41:23.045Z"
