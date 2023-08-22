@@ -1,6 +1,7 @@
 // export const API_URL = 'https://file-hosting-api.site.quack-lab.dev/api';
 export const ORIGIN = 'http://localhost:3000'
 export const API_URL = `${ORIGIN}/api`;
+export const FILE_URL = `${ORIGIN}/file`;
 
 export const DEFAULT_HEADERS = {
 	'Accept': 'application/json',

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { File } from '$types';
 	import iconTable from '$lib/IconTable.json';
-	import { ORIGIN } from '../../env';
+	import { FILE_URL } from '../../env';
 	import { dropdownStore } from '$lib/stores/dropdownStore';
 
 	export let file: File;
@@ -22,7 +22,7 @@
 	}
 
 	function getDownloadLink(file: File): string {
-		return `${ORIGIN}/${file.path}`;
+		return `${FILE_URL}/${file.path}`;
 	}
 
 	function openDropdown(event: Event) {
@@ -42,7 +42,7 @@
 <li>
 	<!-- TODO: Make these drag and droppable https://svelte.dev/repl/b225504c9fea44b189ed5bfb566df6e6?version=4.2.0 -->
 	{#if file.children}
-		<details>
+		<details open>
 			<!-- svelte-ignore a11y-no-static-element-interactions -->
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<summary class="opacity-60" on:contextmenu={openDropdown}>

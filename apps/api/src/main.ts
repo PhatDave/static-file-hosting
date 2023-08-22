@@ -7,7 +7,7 @@ import cors from 'cors';
 import serveStatic from 'serve-static';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT ?? 3000;
 const DESTINATION_FOLDER = 'upload';
 const WEB_FOLDER = 'web';
 
@@ -79,7 +79,7 @@ app.post('/file/**', upload.single('file'), (req, res) => {
     res.status(200).json({ message: 'File uploaded successfully!' });
 });
 
-app.get('/api', async (req, res) => {
+app.get('/api', (req, res) => {
     const tree = buildTree();
     cleanTree(tree)
     res.json({ root: tree });

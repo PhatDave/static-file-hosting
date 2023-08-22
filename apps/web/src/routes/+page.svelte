@@ -16,19 +16,24 @@
 		if (dropdownElement) {
 			dropdownElement.style.left = `${$dropdownStore.clickXY.x}px`;
 			dropdownElement.style.top = `${$dropdownStore.clickXY.y}px`;
-			console.log(dropdownElement);
 		}
 	}
 
-	document.onclick = (event: Event) => {
+	function closeDropdown(event: Event) {
 		if ($dropdownStore.open) {
 			dropdownStore.close();
 			event.stopPropagation();
 			event.preventDefault();
 		}
-	};
+	}
+
+	function blockCtxMenu(event: Event) {
+		event.stopPropagation();
+		event.preventDefault();
+	}
 </script>
 
+<svelte:window on:click={closeDropdown} on:contextmenu={blockCtxMenu} />
 {#if root}
 	<div class="flex justify-center">
 		<ul class="menu menu-lg bg-base-200 rounded-lg w-10/12 overflow-clip text-ellipsis">
