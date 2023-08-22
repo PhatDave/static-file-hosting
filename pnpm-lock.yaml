@@ -33,6 +33,9 @@ importers:
       multer:
         specifier: 1.4.5-lts.1
         version: 1.4.5-lts.1
+      serve-static:
+        specifier: 1.15.0
+        version: 1.15.0
     devDependencies:
       '@types/cors':
         specifier: ^2.8.13

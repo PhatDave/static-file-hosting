@@ -1,20 +1,21 @@
 import express from 'express';
 import dirTree from "directory-tree";
 import multer from 'multer';
-import serveStatic from 'serve-static';
 import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
+import serveStatic from 'serve-static';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DESTINATION_FOLDER = 'upload';
+const WEB_FOLDER = 'web';
 
 if (!fs.existsSync(DESTINATION_FOLDER)) {
     fs.mkdirSync(DESTINATION_FOLDER);
 }
 
-app.use(serveStatic(DESTINATION_FOLDER));
+app.use(serveStatic(WEB_FOLDER));
 app.use(cors());
 
 const storage = multer.diskStorage({
@@ -50,15 +51,38 @@ function cleanTree(tree: dirTree.DirectoryTree<Record<string, any>>) {
 
 const upload = multer({ storage: storage });
 
+app.get('/file/**', (req, res) => {
+    // @ts-ignore
+    if (!req.params[0]) {
+        res.status(400).json({ message: 'Path is required!' });
+        return;
+    }
+    // @ts-ignore
+    const _path = req.params[0] as string;
+    if (_path.includes('..') || _path === '/') {
+        if (res) {
+            res.status(400).json({ message: 'Invalid path!' });
+        }
+        return;
+    }
+    const fullPath = path.join(DESTINATION_FOLDER, _path).replace(/\\/g, '/');
+    if (!fs.existsSync(fullPath)) {
+        res.status(404).json({ message: 'File not found!' });
+        return;
+    }
+    console.log(`Serving ${fullPath}`);
+    res.status(200).sendFile(fullPath, {root: '.'});
+});
+
+app.post('/file/**', upload.single('file'), (req, res) => {
+    console.log(`Uploading file ${req.file?.originalname} with size ${req.file?.size}B`);
+    res.status(200).json({ message: 'File uploaded successfully!' });
+});
+
 app.get('/api', async (req, res) => {
     const tree = buildTree();
     cleanTree(tree)
     res.json({ root: tree });
-});
-
-app.post('/api/**', upload.single('file'), (req, res) => {
-    console.log(`Uploading file ${req.file?.originalname} with size ${req.file?.size}B`);
-    res.status(200).json({ message: 'File uploaded successfully!' });
 });
 
 app.delete('/api/**', (req, res) => {
