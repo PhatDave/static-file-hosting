@@ -5,6 +5,8 @@
 	import { dropdownStore } from '$lib/stores/dropdownStore';
 	import { fileStore } from '$lib/stores/file';
 	import type { Writable } from 'svelte/store';
+	import type { Action } from 'svelte/action';
+	import { renameFile } from '$lib/API';
 
 	export let f: File;
 	let nameInput: HTMLSpanElement;
@@ -62,6 +64,8 @@
 	function nameInputTrigger(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
 			doRename(nameInput.innerText.trim());
+			event.stopPropagation();
+			event.preventDefault();
 			return false;
 		}
 	}
@@ -71,6 +75,78 @@
 		renameFile($file, $file.path.replace(new RegExp(`${$file.name}$`), newName));
 	}
 
+	const draggable: Action<HTMLDetailsElement, { path: string }> = (node, param) => {
+		let state = param;
+		node.style.cursor = 'grab';
+
+		function handleDragStart(e: DragEvent) {
+			console.log(`Embeding path: ${param.path}`);
+			e.dataTransfer?.setData('text/plain', state.path);
+		}
+
+		node.addEventListener('dragstart', handleDragStart);
+
+		return {
+			update(data) {
+				state = data;
+			},
+			destroy() {
+				node.removeEventListener('dragstart', handleDragStart);
+			}
+		};
+	};
+
+	let disable = false;
+
+	const dropzone: Action<HTMLLIElement, { onDropzone: (path: string) => void }> = (node, param) => {
+		let state = {
+			dropEffect: 'move',
+			dragover_class: 'droppable',
+			...param
+		};
+
+		const handleDragEnter = (e: DragEvent & { target: HTMLElement }) => {
+			e.target.classList.add('outline-2');
+			e.target.classList.add('outline-primary');
+			e.target.classList.add('outline');
+		};
+
+		const handleDragLeave = (e: DragEvent & { target: HTMLElement }) => {
+			e.target.classList.remove('outline-2');
+			e.target.classList.remove('outline');
+			e.target.classList.remove('outline-primary');
+		};
+
+		const handleDragOver = (e: DragEvent & { target: HTMLElement }) => {
+			e.preventDefault();
+			if (!e.dataTransfer) return;
+			e.dataTransfer.dropEffect = 'move';
+		};
+
+		const handleDrop = (e: DragEvent) => {
+			e.preventDefault();
+			const path = e.dataTransfer?.getData('text/plain') ?? '';
+			console.log(`Got embeded path ${path}`);
+			state.onDropzone(path);
+		};
+
+		// @ts-ignore
+		node.addEventListener('dragenter', handleDragEnter);
+		// @ts-ignore
+		node.addEventListener('dragleave', handleDragLeave);
+		// @ts-ignore
+		node.addEventListener('dragover', handleDragOver);
+		node.addEventListener('drop', handleDrop);
+
+		return {
+			destroy() {
+				node.removeEventListener('dragenter', handleDragEnter);
+				node.removeEventListener('dragleave', handleDragLeave);
+				node.removeEventListener('dragover', handleDragOver);
+				node.removeEventListener('drop', handleDrop);
+			}
+		};
+	};
 	// TODO: Make directory makeable
 	// TODO: Make item deleteable
 	// TODO: Make item renameable
@@ -79,18 +155,20 @@
 	// Maybe tarball them on web and send them to the server to be extracted?
 </script>
 
-<li>
+<li
+	use:dropzone={{
+		onDropzone: p => {
+			console.log($file.path);
+		}
+	}}>
 	<!-- TODO: Make these drag and droppable https://svelte.dev/repl/b225504c9fea44b189ed5bfb566df6e6?version=4.2.0 -->
 	{#if $file.children}
-		<details open>
+		<details draggable={true} use:draggable={{ path: $file.path }} on:dragenter={e => {}} open>
 			<!-- svelte-ignore a11y-no-static-element-interactions -->
 			<!-- svelte-ignore a11y-click-events-have-key-events -->
 			<summary class="opacity-60" on:contextmenu={openDropdown}>
 				<img class="aspect-square w-8" src="/icons/{getIcon($file)}" alt="Bronk" />
-				<span bind:this={nameInput} 
-				on:keydown={nameInputTrigger} 
-				on:focusout={doUnfocus} 
-				contenteditable={$file.isEditable}>{$file.name}</span>
+				<span bind:this={nameInput} on:keydown={nameInputTrigger} on:focusout={doUnfocus} contenteditable={$file.isEditable}>{$file.name}</span>
 			</summary>
 			<ul>
 				{#each $file.children as child}
@@ -102,10 +180,7 @@
 		<!-- svelte-ignore a11y-no-static-element-interactions -->
 		<a href={getDownloadLink($file)} on:contextmenu={openDropdown} class="flex items-center">
 			<img class="aspect-square w-8" src="/icons/{getIcon($file)}" alt="Bronk" />
-			<span bind:this={nameInput} 
-			on:keydown={nameInputTrigger} 
-			on:focusout={doUnfocus} 
-			contenteditable={$file.isEditable}>{$file.name}</span>
+			<span bind:this={nameInput} on:keydown={nameInputTrigger} on:focusout={doUnfocus} contenteditable={$file.isEditable}>{$file.name}</span>
 		</a>
 	{/if}
 </li>
