@@ -1,0 +1,28 @@
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+
+export const themes = ['dark', 'light'] as const;
+export type Theme = (typeof themes)[number];
+
+export type NavLink = {
+	target: {
+		href: string;
+		newTab?: boolean;
+	};
+	content: {
+		text?: string;
+		icon?: IconDefinition;
+	};
+};
+
+export interface APIResponse {
+	files: File[];
+}
+
+export interface File {
+	name:      string;
+	path:      string;
+	size:      number;
+	type:      string;
+	extension: string;
+	mtime:     string;
+}

@@ -1,0 +1,8 @@
+﻿.vscode
+node_modules
+apps/api/upload
+dist
+apps/api/.turbo
+apps/api/web/_app
+apps/web/.turbo
+apps/api/build
