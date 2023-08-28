@@ -5,7 +5,7 @@
 		"build": "turbo run build"
 	},
 	"dependencies": {
-		"turbo": "^1.10.12"
+		"turbo": "^1.10.13"
 	},
 	"devDependencies": {
 		"prettier": "^3.0.2",

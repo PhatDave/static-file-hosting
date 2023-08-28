@@ -6,6 +6,8 @@
 	import DropdownComp, { type DropdownButton } from '$lib/components/DropdownComp.svelte';
 	import { dropdownStore } from '$lib/stores/dropdownStore';
 
+	export let path;	
+
 	let root: File | undefined = undefined;
 	onMount(async () => {
 		root = await getFiles();
